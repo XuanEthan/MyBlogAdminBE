@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyBlogAdminService.Data;
 
@@ -11,9 +12,11 @@ using MyBlogAdminService.Data;
 namespace MyBlogAdminService.Migrations
 {
     [DbContext(typeof(MyBlogAdminDbContext))]
-    partial class MyBlogAdminDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251012203812_AddSomeEntities")]
+    partial class AddSomeEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,21 +24,6 @@ namespace MyBlogAdminService.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("CategoryPost", b =>
-                {
-                    b.Property<int>("CategoriesId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PostsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("CategoriesId", "PostsId");
-
-                    b.HasIndex("PostsId");
-
-                    b.ToTable("CategoryPost");
-                });
 
             modelBuilder.Entity("MyBlogAdminService.Models.Category", b =>
                 {
@@ -51,7 +39,7 @@ namespace MyBlogAdminService.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Category");
                 });
 
             modelBuilder.Entity("MyBlogAdminService.Models.Post", b =>
@@ -62,6 +50,9 @@ namespace MyBlogAdminService.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("CategoryId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -69,11 +60,18 @@ namespace MyBlogAdminService.Migrations
                     b.Property<DateTime?>("Created")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("TagId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("TagId");
 
                     b.ToTable("Posts");
                 });
@@ -92,52 +90,22 @@ namespace MyBlogAdminService.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tags");
+                    b.ToTable("Tag");
                 });
 
-            modelBuilder.Entity("PostTag", b =>
+            modelBuilder.Entity("MyBlogAdminService.Models.Post", b =>
                 {
-                    b.Property<int>("PostsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TagsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("PostsId", "TagsId");
-
-                    b.HasIndex("TagsId");
-
-                    b.ToTable("PostTag");
-                });
-
-            modelBuilder.Entity("CategoryPost", b =>
-                {
-                    b.HasOne("MyBlogAdminService.Models.Category", null)
+                    b.HasOne("MyBlogAdminService.Models.Category", "Category")
                         .WithMany()
-                        .HasForeignKey("CategoriesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CategoryId");
 
-                    b.HasOne("MyBlogAdminService.Models.Post", null)
+                    b.HasOne("MyBlogAdminService.Models.Tag", "Tag")
                         .WithMany()
-                        .HasForeignKey("PostsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
+                        .HasForeignKey("TagId");
 
-            modelBuilder.Entity("PostTag", b =>
-                {
-                    b.HasOne("MyBlogAdminService.Models.Post", null)
-                        .WithMany()
-                        .HasForeignKey("PostsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Category");
 
-                    b.HasOne("MyBlogAdminService.Models.Tag", null)
-                        .WithMany()
-                        .HasForeignKey("TagsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Tag");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections;
+using System.ComponentModel.DataAnnotations;
 
 namespace MyBlogAdminService.Models
 {
@@ -7,13 +8,16 @@ namespace MyBlogAdminService.Models
         [Key]
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "Title is required")]
+        [Required(ErrorMessage = "Title is required.")]
         public string? Title { get; set; }
-        //public byte[] Image { get; set; }
 
-        [Required(ErrorMessage = "Paragraph is required")]
-        public string? Paragraph { get; set; }
+        [Required(ErrorMessage = "Content is required.")]
+        public string? Content { get; set; }
 
         public DateTime? Created { get; set; }
+
+        public ICollection<Category>? Categories { get; set; } = new List<Category>();
+
+        public ICollection<Tag>? Tags { get; set; } = new List<Tag>();
     }
 }

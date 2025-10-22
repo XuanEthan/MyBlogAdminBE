@@ -2,7 +2,7 @@
 
 namespace MyBlogAdminService.Models.dtos
 {
-    public class CreatePostDto
+    public class PostCreateDto
     {
         [Required(ErrorMessage = "Title is required.")]
         public string? Title { get; set; }

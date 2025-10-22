@@ -23,9 +23,16 @@ namespace MyBlogAdminService.Controllers
 
         // GET: api/Tags
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Tag>>> GetTags()
+        public async Task<ActionResult<IEnumerable<Tag>>> GetTags(string? searchKey)
         {
-            return await _context.Tags.ToListAsync();
+            var tags = _context.Tags.AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchKey))
+            {
+                tags = tags.Where(c => c.Name.Contains(searchKey));
+            }
+
+            return await tags.ToListAsync();
         }
 
         // GET: api/Tags/5

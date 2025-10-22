@@ -25,9 +25,15 @@ namespace MyBlogAdminService.Controllers
 
         // GET: api/Categories
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
+        public async Task<ActionResult<IEnumerable<Category>>> GetCategories(string? searchKey)
         {
-            return await _context.Categories.ToListAsync();
+            var categories = _context.Categories.AsQueryable();
+            
+            if (!string.IsNullOrEmpty(searchKey)) {
+                categories = categories.Where(c => c.Name.Contains(searchKey));
+            }
+
+            return await categories.ToListAsync();
         }
 
         // GET: api/Categories/5

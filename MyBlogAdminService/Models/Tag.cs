@@ -10,6 +10,9 @@ namespace MyBlogAdminService.Models
 
         [Required(ErrorMessage = "Tag name is required.")]
         public string? Name { get; set; }
+
+        public string? Description { get; set; }
+
         [JsonIgnore]
         public ICollection<Post>? Posts { get; set; }
     }

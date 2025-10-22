@@ -61,11 +61,11 @@ namespace MyBlogAdminService.Controllers
         // PUT: api/Posts/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPost(int id, UpdatePostDto dto)
+        public async Task<IActionResult> PutPost(int id, PostUpdateDto dto)
         {
             if (id != dto.Id)
             {
-                return BadRequest();
+                return NotFound();
             }
             
             var post = await _context.Posts
@@ -112,7 +112,7 @@ namespace MyBlogAdminService.Controllers
         // POST: api/Posts
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Post>> PostPost(CreatePostDto dto)
+        public async Task<ActionResult<Post>> PostPost(PostCreateDto dto)
         {
             var foundCategories = await getCategoriesByIds(dto.CategoryIds);
             var foundTags = await getTagsByIds(dto.TagIds);

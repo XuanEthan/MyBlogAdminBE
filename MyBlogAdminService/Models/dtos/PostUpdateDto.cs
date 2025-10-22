@@ -2,7 +2,7 @@
 
 namespace MyBlogAdminService.Models.dtos
 {
-    public class UpdatePostDto
+    public class PostUpdateDto
     {
         public int Id { get; set; }
 
